@@ -9,7 +9,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return (
     <Auth0Provider
       domain="dev-m2puvljphbfugmii.us.auth0.com"
-      clientId="jq2cY6BnSAnujKn7DUv1iCchBDpldtGr"
+      clientId="ic5HdgR1mCtUzcmBvAdSg3q4s34uLTL2"
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: 'https://quran-teaching-api/',
