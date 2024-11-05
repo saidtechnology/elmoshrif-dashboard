@@ -1,40 +1,80 @@
-import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { BookOpen } from 'lucide-react';
+import { useState } from 'react';
+import { FcGoogle } from 'react-icons/fc';
 
 export function Login() {
   const { loginWithRedirect } = useAuth0();
+  const [showCustomLogin, setShowCustomLogin] = useState(false);
 
-  return (
-    <div className="min-h-screen bg-[#f8f4ec] flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-            <BookOpen className="w-8 h-8 text-emerald-600" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-800">نظام إدارة تحفيظ القرآن</h1>
-          <p className="text-gray-500 mt-2">الرجاء تسجيل الدخول للمتابعة</p>
-        </div>
-
-        <div className="space-y-4">
-          <button
-            onClick={() => loginWithRedirect()}
-            className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors"
-          >
-            تسجيل الدخول
-          </button>
+  if (showCustomLogin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+          <h2 className="text-center text-3xl font-bold">مرحباً بك</h2>
+          <div className="space-y-4">
+            <button
+              onClick={() => loginWithRedirect({
+                authorizationParams: {
+                  connection: 'google-oauth2'
+                }
+              })}
+              className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+            >
+              <FcGoogle className="text-xl" />
+              تسجيل الدخول باستخدام جوجل
+            </button>
           
-          <button
-            onClick={() => loginWithRedirect({
-              connection: 'google-oauth2'
-            })}
-            className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-          >
-            <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
-            <span>تسجيل الدخول باستخدام Google</span>
-          </button>
+            <button
+              onClick={() => setShowCustomLogin(true)}
+              className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700"
+            >
+              تسجيل الدخول باستخدام البريد الإلكتروني
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  } else {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+          <h2 className="text-center text-3xl font-bold">تسجيل الدخول</h2>
+          <form className="space-y-6" onSubmit={(e) => {
+            e.preventDefault();
+            loginWithRedirect();
+          }}>
+            <div>
+              <label className="block text-right mb-2">البريد الإلكتروني</label>
+              <input
+                type="email"
+                required
+                className="w-full px-3 py-2 border rounded-md text-right"
+              />
+            </div>
+            <div>
+              <label className="block text-right mb-2">كلمة المرور</label>
+              <input
+                type="password"
+                required
+                className="w-full px-3 py-2 border rounded-md text-right"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700"
+            >
+              تسجيل الدخول
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCustomLogin(false)}
+              className="w-full text-gray-600 underline"
+            >
+              العودة
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+  }
